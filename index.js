@@ -24,6 +24,42 @@ app.get("/api/hello", function (req, res) {
   res.json({greeting: 'hello API'});
 });
 
+// my timestamp m-service
+// const handleDateReq = (req, res, next) => {
+//   console.log("req.params.api:::",req.params.api);
+//   console.log("test:::",new Date(req.params.api));
+//   // res.json({test: req});
+// };
+app.get("/api/:date", (req, res, next) => {
+  const reqDate = req.params.date;
+  let retDate;
+  const reqNumber = Number(reqDate);
+  if (Number.isInteger(reqNumber)) {
+    console.log("integer found");
+    retDate = new Date(reqNumber);
+    res.json({unix: retDate.getTime(), utc: retDate.toString()});
+  } else {
+    retDate = new Date(reqDate);
+    console.log("retDate:", retDate);
+    if (retDate.toString() == 'Invalid Date') {
+      res.json({error: retDate.toString()});
+    } else {
+      res.json({unix: retDate.getTime(), utc: retDate.toString()});
+    }
+  };
+  console.log("---req.params.api:::",typeof req.params.date);
+  console.log("---req.params.api:::", req.params.date);
+  console.log("---retDate type:::",typeof retDate);
+  // console.log("---test:::", new Date());
+  // res.json({test: req});
+});
+
+// for empty date
+app.get("/api/", (req, res, next) => {
+  console.log("null date...");
+  retDate = new Date();
+  res.json({unix: retDate.getTime(), utc: retDate.toString()});
+});
 
 
 // Listen on port set in environment variable or default to 3000
